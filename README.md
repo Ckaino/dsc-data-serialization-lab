@@ -147,7 +147,7 @@ In the cell below, use the `json` module to load the data from `world_cup_file` 
 
 ```python
 # Replace None with appropriate code
-world_cup_data = None
+world_cup_data = json.load(world_cup_file)
 
 # Close the file now that we're done reading from it
 world_cup_file.close()
@@ -175,7 +175,7 @@ Now use the `csv` module to load the data from `population_file` into a list of 
 
 ```python
 # Replace None with appropriate code
-population_data = None
+population_data = list(csv.DictReader(population_file))
 
 # Close the file now that we're done reading from it
 population_file.close()
@@ -321,9 +321,9 @@ matches = []
 # "round" is a built-in function in Python so we use "round_" instead
 for round_ in rounds:
     # Extract the list of matches for this round
-    round_matches = None
+    round_matches = round_['matches']
     # Add them to the overall list of matches
-    None
+     matches.extend(round_matches)
 
 matches[0]
 ```
@@ -364,9 +364,9 @@ teams_set = set()
 
 for match in matches:
     # Add team1 name value to teams_set
-    None
+    teams_set.add(match['team1']['name'])
     # Add team2 name value to teams_set
-    None
+    teams_set.add(match['team2']['name'])
 
 teams = sorted(list(teams_set))
 print(teams)
@@ -440,7 +440,7 @@ Initially `combined_data` will look something like this:
 # Replace None with appropriate code
 
 # Create the variable combined_data as described above
-None
+teams_set.add(match['team2']['name'])
 ```
 
 Check that the `assert`s pass.
@@ -505,7 +505,12 @@ def find_winner(match):
     Given a dictionary containing information about a match,
     return the name of the winner (or None in the case of a tie)
     """
-    None
+    if  match['score1'] > match['score2']:
+        return match['team1']['name']
+    elif match['score2'] > match['score1']:
+        return match['team2']['name']
+    else:
+        return None
 ```
 
 
@@ -524,12 +529,12 @@ Now that we have this helper function, loop over every match in `matches`, find 
 
 for match in matches:
     # Get the name of the winner
-    winner = None
+    winner = find_winner(match)
     # Only proceed to the next step if there was
     # a winner
     if winner:
         # Add 1 to the associated count of wins
-        None
+        combined_data[winner]["wins"] += 1
 
 # Visually inspect the output to ensure the wins are
 # different for different countries
@@ -666,7 +671,8 @@ population_data_filtered = []
 
 for record in population_data:
     # Add record to population_data_filtered if relevant
-    None
+    if record['Country Name'] in teams and record['Year'] == "2018":
+        population_data_filtered.append(record)
 
 len(population_data_filtered)  # 27
 ```
@@ -735,13 +741,13 @@ population_data_filtered = []
 
 for record in population_data:
     # Get normalized country name
-    None
+    normalized_name = normalize_location(record["Country Name"])
     # Add record to population_data_filtered if relevant
-    if None:
+    if normalized_name in teams and record["Year"] == "2018":
         # Replace the country name in the record
-        None
+        record["Country Name"] = normalized_name
         # Append to list
-        None
+        population_data_filtered.append(record)
 
 len(population_data_filtered)  # 32
 ```
@@ -767,7 +773,7 @@ In the cell below, loop over `population_data_filtered` and convert the data typ
 # Replace None with appropriate code
 for record in population_data_filtered:
     # Convert the population value from str to int
-    None
+     record["Value"] = int(record["Value"])
 
 # Look at the last record to make sure the population
 # value is an int
@@ -808,11 +814,11 @@ In the cell below, loop over `population_data_filtered` and add information abou
 # Replace None with appropriate code
 for record in population_data_filtered:
     # Extract the country name from the record
-    country = None
+    country = record["Country Name"]
     # Extract the population value from the record
-    population = None
+    population = record["Value"]
     # Add this information to combined_data
-    None
+    combined_data[country]["population"] = population
 
 # Look combined_data
 combined_data
@@ -890,7 +896,7 @@ In the cell below, interpret this number. What direction is this correlation? Is
 ```python
 # Replace None with appropriate code
 """
-None
+very weak positive correlation
 """
 ```
 
@@ -938,7 +944,7 @@ Interpret this plot in the cell below. Does this align with the findings from th
 ```python
 # Replace None with appropriate text
 """
-None
+There is no relationship between population and World Cups wins
 """
 ```
 
@@ -957,7 +963,8 @@ In the cell below, write down your thoughts on these questions:
 ```python
 # Replace None with appropriate text
 """
-None
+The population of a country can be small but have good players 
+The relationship between th age of the players and the wins
 """
 ```
 
